@@ -1,4 +1,4 @@
-version: '2'
+version: '3.8'
 services:
   api:
     build: .
@@ -11,6 +11,9 @@ services:
     volumes:
       - ${ADBREW_CODEBASE_PATH}/tmp:/tmp
       - ${ADBREW_CODEBASE_PATH}:/src
+    depends_on:
+      - mongo
+    
 
   app:
     build: .
@@ -18,11 +21,13 @@ services:
     command: bash -c "cd /src/app && yarn install && yarn start"
     ports:
       - "3000:3000"
+    environment:
+      - NODE_OPTIONS=--openssl-legacy-provider
     volumes:
       - ${ADBREW_CODEBASE_PATH}:/src
 
   mongo:
-    build: .
+    image: mongo:4.4
     container_name: mongo
     restart: always
     ports:
