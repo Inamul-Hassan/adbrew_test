@@ -22,7 +22,11 @@ class MongoDbTodo(TodoDatabase):
         mongo_uri = f"mongodb://{os.environ['MONGO_HOST']}:{os.environ['MONGO_PORT']}"
         self.client = MongoClient(mongo_uri)
         self.db = self.client['todo_db']
+        # Delete the collection to reset the database [Testing Purpose]
+        # self.db.drop_collection('todos')
         self.todo_collection = self.db['todos']
+        
+        
 
     def get_todos(self) -> List[Dict]:
       """
